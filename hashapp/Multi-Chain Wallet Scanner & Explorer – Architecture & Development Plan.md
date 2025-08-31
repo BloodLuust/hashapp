@@ -1,4 +1,9 @@
-﻿# <a name="header"></a><a name="content"></a><a name="x4d1c873bd45608d482b7494dc1d01a31a1cd69d"></a>Multi-Chain Wallet Scanner & Explorer – Architecture & Development Plan
+﻿[![Ethical Use: Watch‑Only](https://img.shields.io/badge/Ethical%20Use-Watch--Only%20By%20Default-brightgreen)](#purpose-ethics--safe-use)
+[![Sweeping: Disabled](https://img.shields.io/badge/Sweeping-Disabled%20by%20default-lightgrey)](#purpose-ethics--safe-use)
+[![Responsible Disclosure](https://img.shields.io/badge/Security-Responsible%20Disclosure-blue)](SECURITY.md)
+[![Code of Conduct](https://img.shields.io/badge/Community-Code%20of%20Conduct-9cf)](CODE_OF_CONDUCT.md)
+
+# <a name="header"></a><a name="content"></a><a name="x4d1c873bd45608d482b7494dc1d01a31a1cd69d"></a>Multi-Chain Wallet Scanner & Explorer – Architecture & Development Plan
 ## <a name="project-overview"></a>Project Overview
 Build a **full-stack** web application for scanning cryptocurrency wallets (addresses and extended public keys) across multiple blockchains. The system will consist of a **Next.js** frontend and a **FastAPI** backend, with a **MongoDB** database for persistence. Users can create accounts, initiate scans of their wallet addresses (e.g. Bitcoin xpub/ypub/zpub/tpub or Ethereum addresses), and view real-time progress and historical analytics of transactions. The application will leverage external blockchain APIs (Infura, Tatum, Blockchair) to fetch comprehensive transaction history for each supported chain[\[1\]](https://blockchair.com/api/docs#:~:text=Blockchair%20API%20provides%20developers%20with,sorting%2C%20and%20aggregating%20blockchain%20data)[\[2\]](https://vocal.media/education/the-top-10-blockchain-api-providers-for-developers-in-2025#:~:text=7). We will containerize all components with Docker for easy deployment and ensure the system is secure, scalable, and maintainable.
 ## <a name="system-architecture"></a>System Architecture
