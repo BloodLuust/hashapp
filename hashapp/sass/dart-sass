@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="Syntactically Awesome Style Sheets" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sass: Dart Sass</title>
+
+    <link
+      rel="alternate"
+      type="application/atom+xml"
+      href="/feed.xml" />
+
+    <link rel="apple-touch-icon" sizes="152x152" type="image/png" href="/icon.png">
+    <link rel="icon" type="image/png" sizes="152x152" href="/icon.png">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Source+Code+Pro::ital,wght@0,400;0,600;1,400|Source+Sans+Pro:300,400,600|Source+Serif+Pro"
+      media="screen"
+      rel="stylesheet" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@docsearch/css@alpha"
+      media="screen"
+      rel="stylesheet" />
+    <link
+      href="/assets/dist/css/sass.css"
+      media="screen"
+      rel="stylesheet" />
+
+    <noscript>
+      <link
+        href="/assets/dist/css/noscript.css"
+        media="screen"
+        rel="stylesheet" />
+    </noscript>
+
+    <!-- Google Analytics (https://developers.google.com/analytics/devguides/collection/gtagjs). -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-535380-14"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'UA-535380-14');
+    </script>
+  </head><body data-layout="body" class="dart-sass">
+    <!--[if lt IE 9]>
+    <p class="browserupgrade">
+    You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.
+    </p>
+    <![endif]-->
+
+    <header
+  class="sl-r-banner"
+  itemtype="https://schema.org/WPHeader"
+  itemscope="itemscope"
+  role="banner">
+  
+    
+      
+    
+    <div class="sl-c-alert" style="--sl-background--alert: black">
+      <div class="sl-l-container">
+        
+        <p><strong>Free Palestine</strong></p>
+
+      </div>
+    </div>
+  
+
+  <div class="sl-c-pop-stripe"></div>
+  <div class="sl-l-container">
+    <div class="sl-l-grid sl-l-grid--full sl-l-large-grid--fit sl-l-large-grid--center sl-l-large-grid--gutters">
+      <p class="sl-l-grid__column sl-r-banner__brand">
+        <a href="/"><img
+            height="48"
+            alt="Sass"
+            src="/assets/img/logos/logo.svg"></a>
+      </p>
+
+      <nav
+  class="sl-r-banner__navigation sl-l-grid__column sl-l-large-grid sl-l-large-grid__column--auto-size sl-c-list-horizontal-wrapper"
+  itemtype="https://schema.org/SiteNavigationElement"
+  itemscope="itemscope"
+  role="navigation"
+  aria-label="Site navigation">
+<ul>
+<li><a href="/playground">Playground</a></li>
+<li><a href="/install">Install</a></li>
+<li><a href="/guide">Learn Sass</a></li>
+<li><a href="/blog">Blog</a></li>
+<li><a href="/documentation">Documentation</a></li>
+<li><a href="/community">Get Involved</a></li>
+<li>
+<div id="docsearch"></div>
+</li>
+</ul>
+</nav>
+
+    </div>
+  </div>
+</header>
+
+
+    <main class="content" id="main-content" itemprop="mainContentOfPage" role="main">
+      
+      
+        <h1 class="sl-l-container">Dart Sass</h1>
+      
+
+      <div class="sl-l-container sl-color--white-background sl-l-section">
+        
+<div class="docSearch-content">
+  
+
+  <div class="sl-c-introduction">
+    <p>Dart Sass is the primary implementation of Sass, which means it gets new features before any other implementation. It&#8217;s fast, easy to install, and it compiles to pure JavaScript which makes it easy to integrate into modern web development workflows. Find out more or help out with its development on <a href="https://github.com/sass/dart-sass">GitHub</a>.</p>
+
+  </div>
+
+
+
+  <div class="sl-l-grid sl-l-grid--full sl-l-large-grid--fit sl-l-large-grid--gutters-large">
+  <div class="sl-l-grid__column">
+<h2 id="command-line" tabindex="-1">Command Line<a class="anchor" href="#command-line"><span class="visuallyhidden">Command Line permalink</span></a></h2>
+<p>Dart Sass&#8217;s stand-alone command-line executable uses the blazing-fast Dart <span class="caps">VM</span> to
+compile your stylesheets. To install Dart Sass on the command line, check out
+the <a href="/install">installation instructions</a>. Once you&#8217;ve got it running, you can
+use it compile<span class="widont">&nbsp;</span>files:</p>
+<pre class="language-shellsession"><code class="language-shellsession"><span class="token output">sass source/index.scss css/index.css
+</span></code></pre>
+<p>See <code>sass --help</code> for additional information on the command-line<span class="widont">&nbsp;</span>interface.</p>
+<h3 id="dart-library" tabindex="-1">Dart Library<a class="anchor" href="#dart-library"><span class="visuallyhidden">Dart Library permalink</span></a></h3>
+<p>You can also use Dart Sass as a Dart library to get the speed of the Dart <span class="caps">VM</span>
+plus the ability to define your own functions and importers. To add it to an
+existing<span class="widont">&nbsp;</span>project:</p>
+<ol>
+<li>
+<p><a href="https://dart.dev/get-dart">Install the Dart <span class="caps">SDK</span></a>. Make sure its <code>bin</code> directory is <a href="https://katiek2.github.io/path-doc/">on your
+<code>PATH</code></a>.</p>
+</li>
+<li>
+<p>Create a <code>pubspec.yaml</code> file like<span class="widont">&nbsp;</span>this:</p>
+</li>
+</ol>
+<pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">name</span><span class="token punctuation">:</span> my_project
+
+<span class="token key atrule">environment</span><span class="token punctuation">:</span>
+  <span class="token key atrule">sdk</span><span class="token punctuation">:</span> ^3.6.0
+
+<span class="token key atrule">dev_dependencies</span><span class="token punctuation">:</span>
+  <span class="token key atrule">sass</span><span class="token punctuation">:</span> ^1.91.0</code></pre>
+<ol start="3">
+<li>
+<p>Run <code>dart pub get</code>.</p>
+</li>
+<li>
+<p>Create a <code>compile-sass.dart</code> file like<span class="widont">&nbsp;</span>this:</p>
+</li>
+</ol>
+<pre class="language-dart"><code class="language-dart"><span class="token keyword">import</span> <span class="token string-literal"><span class="token string">'dart:io'</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token string-literal"><span class="token string">'package:sass/sass.dart'</span></span> <span class="token operator">as</span> sass<span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> arguments<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> result <span class="token operator">=</span> sass<span class="token punctuation">.</span><span class="token function">compileToResult</span><span class="token punctuation">(</span>arguments<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>arguments<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">writeAsStringSync</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>css<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<ol start="5">
+<li>You can now use this to compile<span class="widont">&nbsp;</span>files:</li>
+</ol>
+<pre class="language-shellsession"><code class="language-shellsession"><span class="token output">dart compile-sass.dart styles.scss styles.css
+</span></code></pre>
+<ol start="6">
+<li>
+<p>Learn more about <a href="https://www.dartlang.org/guides/language/language-tour">writing Dart code</a> (it&#8217;s easy!) and about <a href="https://pub.dev/documentation/sass/latest/sass/compileToResult.html">Sass&#8217;s
+Dart<span class="widont">&nbsp;</span><span class="caps">API</span></a>.</p>
+</li>
+</ol>
+</div>
+<div class="sl-l-grid__column">
+<h2 id="java-script-library" tabindex="-1">JavaScript Library<a class="anchor" href="#java-script-library"><span class="visuallyhidden">JavaScript Library permalink</span></a></h2>
+<p>Dart Sass is also distributed as the pure JavaScript <a href="https://www.npmjs.com/package/sass"><code>sass</code> package</a> and
+<a href="https://www.npmjs.com/package/sass-embedded"><code>sass-embedded</code> package</a> on npm. The pure <span class="caps">JS</span> version is slower than the
+stand-alone executable, but it&#8217;s easy to integrate into existing workflows and
+it allows you to define custom functions and importers in JavaScript. You can
+add it to your project using <code>npm install --save-dev sass</code> and <code>require()</code> it as
+a<span class="widont">&nbsp;</span>library:</p>
+<pre class="language-js"><code class="language-js"><span class="token keyword">const</span> sass <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'sass'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> result <span class="token operator">=</span> sass<span class="token punctuation">.</span><span class="token function">compile</span><span class="token punctuation">(</span><span class="token string">'style.scss'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>css<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// <span class="caps">OR</span></span>
+
+<span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token keyword">await</span> sass<span class="token punctuation">.</span><span class="token function">compileAsync</span><span class="token punctuation">(</span><span class="token string">'style.scss'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>css<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>When installed via npm, Dart Sass supports a <a href="/documentation/js-api/">brand new JavaScript <span class="caps">API</span></a>, as well
+as a <a href="/documentation/js-api/#md:legacy-api">legacy <span class="caps">API</span></a> that&#8217;s fully compatible with the old Node Sass <span class="caps">API</span>. Note that
+when using the <code>sass</code> package, the synchronous <span class="caps">API</span> functions are more than twice
+as fast as the asynchronous <span class="caps">API</span>, due to the overhead of asynchronous<span class="widont">&nbsp;</span>callbacks.</p>
+<h2 id="embedded-dart-sass" tabindex="-1">Embedded Dart Sass<a class="anchor" href="#embedded-dart-sass"><span class="visuallyhidden">Embedded Dart Sass<span class="widont">&nbsp;</span>permalink</span></a></h2>
+<p>Dart Sass also supports the <a href="https://github.com/sass/sass/blob/main/spec/embedded-protocol.md#the-embedded-sass-protocol">Embedded Sass protocol</a>, which allows any
+programming language to communicate directly with the Dart <span class="caps">VM</span> to run Sass
+compilation, including custom function and importer support. This has two major<span class="widont">&nbsp;</span>benefits:</p>
+<ol>
+<li>
+<p>It makes it easy to create a wrapper library for Dart Sass for any
+programming language that can run a<span class="widont">&nbsp;</span>subprocess.</p>
+</li>
+<li>
+<p>The Dart <span class="caps">VM</span> is very fast, so this provides a substantial performance boost
+even for JavaScript where the native <code>sass</code> package is<span class="widont">&nbsp;</span>available.</p>
+</li>
+</ol>
+<p>The following Embedded Sass wrapper packages are available. If you have another
+one to add, please <a href="https://github.com/sass/sass-site/edit/main/source/dart-sass.md">send a pull request</a>!</p>
+<ul>
+<li>
+<p><strong>Node.js</strong>: The <a href="https://www.npmjs.com/package/sass-embedded"><code>sass-embedded</code> package</a> is maintained by the Sass team, and
+supports the same <a href="/documentation/js-api/">official Sass JavaScript <span class="caps">API</span></a> as the native-<span class="caps">JS</span> <code>sass</code> package.</p>
+</li>
+<li>
+<p><strong>Go</strong>: The <a href="https://github.com/bep/godartsass"><code>github.com/bep/godartsass</code> package</a> runs Embedded Sass and
+supports the <a href="https://gohugo.io/">Hugo</a> static site<span class="widont">&nbsp;</span>generator.</p>
+</li>
+<li>
+<p><strong>Java</strong>: The <a href="https://mvnrepository.com/artifact/de.larsgrefer.sass"><code>de.larsgrefer.sass</code> package</a> runs Embedded Sass in<span class="widont">&nbsp;</span>Java.</p>
+</li>
+<li>
+<p><strong>Ruby</strong>: The <a href="https://rubygems.org/gems/sass-embedded"><code>sass-embedded</code> gem</a> is maintained by frequent Sass contributor<span class="widont">&nbsp;</span>なつき.</p>
+</li>
+<li>
+<p><strong>Rust</strong>: The <a href="https://crates.io/crates/sass-embedded"><code>sass-embedded</code> crate</a> runs Embedded Sass in<span class="widont">&nbsp;</span>Rust.</p>
+</div>
+</li>
+</ul>
+</div>
+
+</div>
+
+      </div>
+
+      
+        <div class="sl-c-alert">
+          <div class="sl-l-container sl-c-list-horizontal-wrapper" aria-labelledby="release-nav">
+            <ul class="sl-l-grid--justify-center">
+              <li id="release-nav">Current Releases:</li>
+              <li><span class="release-name"><a href="/dart-sass">Dart Sass</a> <a href="https://github.com/sass/dart-sass/releases/tag/1.91.0">1.91.0</a></span></li>
+              <li><span class="release-name"><a href="/libsass">LibSass</a> <a href="https://github.com/sass/libsass/releases/tag/3.6.6">3.6.6</a></span></li>
+              <li><span class="release-name"><a href="/ruby-sass">Ruby Sass</a> <span aria-label="coffin" role="presentation">⚰</span></span></li>
+              <li class="sl-l-grid__column sl-l-large-grid__column--auto-size"><a href="/implementation">Implementation Guide</a></li>
+            </ul>
+          </div>
+        </div>
+      
+
+      
+    </main>
+
+    <footer
+  class="site-footer contentinfo"
+  itemtype="https://schema.org/WPFooter"
+  itemscope="itemscope"
+  role="contentinfo">
+  <div class="sl-l-container">
+    <div class="sl-l-grid sl-l-grid--full sl-l-large-grid--fit sl-l-large-grid--center sl-l-large-grid--gutters">
+      <div class="sl-l-grid__column">
+        <p>Sass © 2006–2025 the Sass team, and numerous contributors.
+It is available for use and modification under the <a href="https://github.com/sass/dart-sass/blob/main/LICENSE"><span class="caps">MIT</span><span class="widont">&nbsp;</span>License</a>.</p>
+
+
+        <nav class="sl-c-list-horizontal-wrapper sl-c-list-wrap">
+<ul>
+<li><a href="https://github.com/sass">Sass on GitHub</a></li>
+<li><a href="https://github.com/sass/sass-site">Website Source Code</a></li>
+<li><a href="/styleguide">Style Guide</a></li>
+<li><a href="/community-guidelines">Community Guidelines</a></li>
+</ul>
+</nav>
+
+      </div>
+      <div class="sl-l-grid__column sl-l-large-grid__column--auto-size sl-l-large-grid--justify-right sl-c-footer-link-grid">
+        <a
+            rel="me"
+            class="sl-c-button sl-c-button--icon sl-c-button--icon-text"
+            href="https://front-end.social/@sass"><svg
+  width="20"
+  height="20"
+  viewBox="0 0 61 65"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M60.7539 14.3904C59.8143 7.40642 53.7273 1.90257 46.5117 0.836066C45.2943 0.655854 40.6819 0 29.9973 0H29.9175C19.2299 0 16.937 0.655854 15.7196 0.836066C8.70488 1.87302 2.29885 6.81852 0.744617 13.8852C-0.00294988 17.3654 -0.0827298 21.2237 0.0561464 24.7629C0.254119 29.8384 0.292531 34.905 0.753482 39.9598C1.07215 43.3175 1.62806 46.6484 2.41704 49.9276C3.89445 55.9839 9.87499 61.0239 15.7344 63.0801C22.0077 65.2244 28.7542 65.5804 35.2184 64.1082C35.9295 63.9428 36.6318 63.7508 37.3252 63.5321C38.8971 63.0329 40.738 62.4745 42.0913 61.4937C42.1099 61.4799 42.1251 61.4621 42.1358 61.4417C42.1466 61.4212 42.1526 61.3986 42.1534 61.3755V56.4773C42.153 56.4557 42.1479 56.4345 42.1383 56.4151C42.1287 56.3958 42.1149 56.3788 42.0979 56.3655C42.0809 56.3522 42.0611 56.3429 42.04 56.3382C42.019 56.3335 41.9971 56.3336 41.9761 56.3384C37.8345 57.3276 33.5905 57.8234 29.3324 57.8156C22.0045 57.8156 20.0336 54.3384 19.4693 52.8908C19.0156 51.6397 18.7275 50.3346 18.6124 49.0088C18.6112 48.9866 18.6153 48.9643 18.6243 48.9439C18.6333 48.9236 18.647 48.9056 18.6643 48.8915C18.6816 48.8774 18.7019 48.8675 18.7237 48.8628C18.7455 48.858 18.7681 48.8585 18.7897 48.8641C22.8622 49.8465 27.037 50.3423 31.2265 50.3412C32.234 50.3412 33.2387 50.3412 34.2463 50.3146C38.4598 50.1964 42.9009 49.9808 47.0465 49.1713C47.1499 49.1506 47.2534 49.1329 47.342 49.1063C53.881 47.8507 60.1038 43.9097 60.7362 33.9301C60.7598 33.5372 60.8189 29.8148 60.8189 29.4071C60.8218 28.0215 61.2651 19.5781 60.7539 14.3904Z"
+    fill="url(#paint0_linear_89_8)"
+  />
+  <path
+    d="M50.3943 22.237V39.5876H43.5185V22.7481C43.5185 19.2029 42.0411 17.3949 39.036 17.3949C35.7325 17.3949 34.0778 19.5338 34.0778 23.7585V32.9759H27.2434V23.7585C27.2434 19.5338 25.5857 17.3949 22.2822 17.3949C19.2949 17.3949 17.8027 19.2029 17.8027 22.7481V39.5876H10.9298V22.237C10.9298 18.6918 11.835 15.8754 13.6453 13.7877C15.5128 11.7049 17.9623 10.6355 21.0028 10.6355C24.522 10.6355 27.1813 11.9885 28.9542 14.6917L30.665 17.5633L32.3788 14.6917C34.1517 11.9885 36.811 10.6355 40.3243 10.6355C43.3619 10.6355 45.8114 11.7049 47.6847 13.7877C49.4931 15.8734 50.3963 18.6899 50.3943 22.237Z"
+    fill="white"
+  />
+  <defs>
+    <linearGradient
+      id="paint0_linear_89_8"
+      x1="30.5"
+      y1="0"
+      x2="30.5"
+      y2="65"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop stop-color="#6364FF" />
+      <stop offset="1" stop-color="#563ACC" />
+    </linearGradient>
+  </defs>
+</svg>
+@sass@front-end.social
+        </a>
+        <a
+          class="sl-image-link"
+          href="https://www.netlify.com"><img
+            alt="Deploys by Netlify"
+            src="https://www.netlify.com/v3/img/components/netlify-color-bg.svg"/></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    
+      <script src="https://cdn.jsdelivr.net/npm/@docsearch/js@alpha"></script>
+      <script>
+        docsearch({
+          container: '#docsearch',
+          appId: 'Q9MULQONSV',
+          indexName: 'sass-lang',
+          apiKey: '2ebc7881b79986f58dc2f424769bf3fc',
+          transformItems: function(hits) {
+            var domain = window.location.origin + "/";
+            hits.forEach(function(hit) {
+              if (! hit.url.startsWith(domain)) {
+                hit.url = hit.url.replace(/^https?:\/\/[^\/]+\//, domain);
+              }
+            });
+            return hits;
+          }
+        });
+      </script>
+    
+
+    <script src="/assets/dist/js/sass.js"></script>
+    <!-- Current page: /dart-sass/ -->
+  </body>
+</html>
