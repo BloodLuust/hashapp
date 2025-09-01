@@ -37,7 +37,8 @@ async def _run_scan_job(db: AsyncIOMotorDatabase, job_id: str):
         if not isinstance(s, str) or len(s) < 4:
             return False
         p = s[:4].lower()
-        return p in {"xpub", "ypub", "zpub", "tpub", "upub", "vpub"}
+        # Mainnet only: accept xpub/ypub/zpub; explicitly exclude testnet
+        return p in {"xpub", "ypub", "zpub"}
 
     if kind == "address" and isinstance(inp, str) and _looks_like_xpub(inp):
         kind = "xpub"
@@ -68,7 +69,18 @@ async def _run_scan_job(db: AsyncIOMotorDatabase, job_id: str):
         if kind == "address":
             results = await scanner.scan_address(inp, compare_providers=compare)
         else:
-            results = await scanner.scan_xpub(inp, compare_providers=compare)
+            # Normalize ypub/zpub to xpub and reject testnet keys
+            try:
+                from ..services.extkeys import convert_to_xpub, is_testnet_extkey
+                if is_testnet_extkey(inp):
+                    raise HTTPException(status_code=400, detail="Testnet extended keys are not supported")
+                normalized = convert_to_xpub(inp)
+            except Exception as _e:
+                # If it already is a valid xpub, pass through; else raise
+                if not inp.startswith("xpub"):
+                    raise HTTPException(status_code=400, detail=f"Invalid/unsupported extended key: {str(_e)}")
+                normalized = inp
+            results = await scanner.scan_xpub(normalized, compare_providers=compare)
         await db.scans.update_one({"_id": job_id}, {"$push": {"logs": "Aggregating results"}, "$set": {"progress": 80}})
         await asyncio.sleep(0.1)
         await db.scans.update_one({"_id": job_id}, {"$set": {"results": results, "progress": 100, "status": "completed", "completed_at": time.time()}})

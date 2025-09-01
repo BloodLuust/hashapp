@@ -35,3 +35,15 @@ Examples:
 ```
 
 Configure the cap via `HEX_QUEUE_MAX` (default 2048) in your environment.
+
+## Derive From Hex (backend)
+
+Convert a hex seed (≤64 chars) into mainnet extended keys and reference addresses.
+
+- Route: `POST /utils/derive/from-hex` (requires auth cookie)
+- Body: `{ "hex": "deadbeef" }` (left-padded to 64 hex chars)
+- Returns: `{ xprv, xpub, ypub, zpub, btc_address, eth_address }`
+
+Notes:
+- Mainnet only: rejects testnet extended keys elsewhere; this endpoint builds mainnet x/y/z extended keys using our own Base58Check encoding.
+- BIP32 serialization uses depth=0, parent fingerprint=0, child=0, and a dummy chain code of 32 zero bytes for seeds that are not BIP39 mnemonics.

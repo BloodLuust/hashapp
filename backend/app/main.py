@@ -10,6 +10,7 @@ from .core.cache import init_cache, close_cache
 from .api.routes_auth import router as auth_router
 from .api.routes_scan import router as scan_router, ws_router as scan_ws_router
 from .api.routes_hex import router as hex_router
+from .api.routes_derive import router as derive_router
 
 
 logger = logging.getLogger("uvicorn")
@@ -49,3 +50,4 @@ app.include_router(auth_router, prefix="/auth", tags=["auth"])
 app.include_router(scan_router, prefix="/scan", tags=["scan"])
 app.include_router(scan_ws_router)
 app.include_router(hex_router, prefix="/utils", tags=["hex"])
+app.include_router(derive_router, prefix="/utils", tags=["derive"]) 

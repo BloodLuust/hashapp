@@ -9,3 +9,5 @@ aiobreaker
 redis
 email-validator
 dnspython
+ecdsa
+pycryptodome
