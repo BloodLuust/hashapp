@@ -47,3 +47,10 @@ Convert a hex seed (≤64 chars) into mainnet extended keys and reference addres
 Notes:
 - Mainnet only: rejects testnet extended keys elsewhere; this endpoint builds mainnet x/y/z extended keys using our own Base58Check encoding.
 - BIP32 serialization uses depth=0, parent fingerprint=0, child=0, and a dummy chain code of 32 zero bytes for seeds that are not BIP39 mnemonics.
+
+## Extended Key Handling (Mainnet only)
+
+- Input support: Accepts `xpub`, `ypub`, `zpub`. Testnet prefixes (e.g., `tpub`, `upub`, `vpub`) are rejected.
+- Normalization: `ypub`/`zpub` are automatically converted to `xpub` by swapping version bytes (we re‑encode with our own Base58Check). This is recorded under `meta.xpub_normalization` in scan results:
+  - `original`, `original_prefix`, and `normalized_xpub`.
+- Providers: The normalized `xpub` is then scanned via our Blockchair integration, and (when enabled) Tatum is used to cross‑check candidate addresses. This ensures we do not miss accounts originating from `ypub`/`zpub` inputs.

@@ -66,6 +66,8 @@ async def _run_scan_job(db: AsyncIOMotorDatabase, job_id: str):
                     compare = True
             except Exception:
                 pass
+        original_input = inp
+        normalized_info = None
         if kind == "address":
             results = await scanner.scan_address(inp, compare_providers=compare)
         else:
@@ -75,12 +77,28 @@ async def _run_scan_job(db: AsyncIOMotorDatabase, job_id: str):
                 if is_testnet_extkey(inp):
                     raise HTTPException(status_code=400, detail="Testnet extended keys are not supported")
                 normalized = convert_to_xpub(inp)
+                if normalized != inp:
+                    normalized_info = {
+                        "original": inp,
+                        "original_prefix": inp[:4],
+                        "normalized_xpub": normalized,
+                    }
+                    # For normalized ypub/zpub on Bitcoin, force provider compare if available
+                    try:
+                        if (chain or "").lower() in {"bitcoin", "btc"}:
+                            from ..core.config import settings as _settings
+                            if _settings.TATUM_API_KEY:
+                                compare = True
+                    except Exception:
+                        pass
             except Exception as _e:
                 # If it already is a valid xpub, pass through; else raise
                 if not inp.startswith("xpub"):
                     raise HTTPException(status_code=400, detail=f"Invalid/unsupported extended key: {str(_e)}")
                 normalized = inp
             results = await scanner.scan_xpub(normalized, compare_providers=compare)
+            if isinstance(results, dict) and normalized_info:
+                results.setdefault("meta", {}).update({"xpub_normalization": normalized_info})
         await db.scans.update_one({"_id": job_id}, {"$push": {"logs": "Aggregating results"}, "$set": {"progress": 80}})
         await asyncio.sleep(0.1)
         await db.scans.update_one({"_id": job_id}, {"$set": {"results": results, "progress": 100, "status": "completed", "completed_at": time.time()}})
