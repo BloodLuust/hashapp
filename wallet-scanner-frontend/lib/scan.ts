@@ -1,4 +1,4 @@
-export type ScanRequest = { kind: 'address' | 'xpub'; input: string; chain?: string }
+export type ScanRequest = { kind: 'address' | 'xpub'; input: string; chain?: string; compare_providers?: boolean }
 export type ScanCreated = { id: string; status: string }
 export type ScanStatus = { id: string; status: string; progress: number; logs: string[] }
 
@@ -24,4 +24,3 @@ export async function getScanResults<T = any>(id: string): Promise<T> {
   if (!r.ok) throw new Error(`Failed to get results: ${r.status}`)
   return r.json()
 }
-

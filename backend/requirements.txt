@@ -8,3 +8,4 @@ celery
 aiobreaker
 redis
 email-validator
+dnspython

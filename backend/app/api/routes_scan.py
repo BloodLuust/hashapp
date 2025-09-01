@@ -32,6 +32,22 @@ async def _run_scan_job(db: AsyncIOMotorDatabase, job_id: str):
 
     await db.scans.update_one({"_id": job_id}, {"$push": {"logs": f"Chain resolved: {chain}"}, "$set": {"progress": 15}})
 
+    # If user selected 'address' but provided an extended public key, switch to xpub scan automatically
+    def _looks_like_xpub(s: str) -> bool:
+        if not isinstance(s, str) or len(s) < 4:
+            return False
+        p = s[:4].lower()
+        return p in {"xpub", "ypub", "zpub", "tpub", "upub", "vpub"}
+
+    if kind == "address" and isinstance(inp, str) and _looks_like_xpub(inp):
+        kind = "xpub"
+        await db.scans.update_one({"_id": job_id}, {"$push": {"logs": "Detected extended key; switching to xpub scan"}, "$set": {"kind": "xpub"}})
+
+    # Guard: Ethereum doesn't support xpubs
+    if (chain or "").lower() in {"ethereum", "eth"} and kind == "xpub":
+        await db.scans.update_one({"_id": job_id}, {"$set": {"status": "error", "error": "Ethereum does not support xpub", "progress": 100, "completed_at": time.time()}})
+        return
+
     scanner = get_scanner(chain)
     if not scanner:
         await db.scans.update_one({"_id": job_id}, {"$set": {"status": "error", "error": f"Unsupported chain: {chain}", "progress": 100, "completed_at": time.time()}})
@@ -39,15 +55,33 @@ async def _run_scan_job(db: AsyncIOMotorDatabase, job_id: str):
 
     try:
         await db.scans.update_one({"_id": job_id}, {"$push": {"logs": "Fetching data from provider"}, "$set": {"progress": 40}})
+        compare = bool(job.get("compare_providers") or job.get("compare"))
+        # Fallback: for BTC xpubs, if compare not requested but TATUM_API_KEY is set,
+        # enable compare to probe derived addresses cheaply via Tatum.
+        if (chain or "").lower() in {"bitcoin", "btc"} and kind == "xpub" and not compare:
+            try:
+                from ..core.config import settings as _settings
+                if _settings.TATUM_API_KEY:
+                    compare = True
+            except Exception:
+                pass
         if kind == "address":
-            results = await scanner.scan_address(inp)
+            results = await scanner.scan_address(inp, compare_providers=compare)
         else:
-            results = await scanner.scan_xpub(inp)
+            results = await scanner.scan_xpub(inp, compare_providers=compare)
         await db.scans.update_one({"_id": job_id}, {"$push": {"logs": "Aggregating results"}, "$set": {"progress": 80}})
         await asyncio.sleep(0.1)
         await db.scans.update_one({"_id": job_id}, {"$set": {"results": results, "progress": 100, "status": "completed", "completed_at": time.time()}})
     except Exception as e:
-        await db.scans.update_one({"_id": job_id}, {"$set": {"status": "error", "error": str(e), "progress": 100, "completed_at": time.time()}})
+        # Surface error to logs for easier debugging via UI
+        await db.scans.update_one(
+            {"_id": job_id},
+            {"$push": {"logs": f"Error: {str(e)}"},
+             "$set": {"status": "error", "error": str(e), "progress": 100, "completed_at": time.time()}},
+        )
+        # Also log server-side
+        import logging as _logging
+        _logging.getLogger("uvicorn").exception("Scan job %s failed: %s", job_id, e)
 
 
 @router.post("")
@@ -62,6 +96,7 @@ async def create_scan(req: ScanRequest, db: AsyncIOMotorDatabase = Depends(get_d
         "kind": req.kind,
         "input": req.input,
         "chain": req.chain,
+        "compare_providers": bool(getattr(req, 'compare_providers', False)),
         "created_at": time.time(),
     }
     await db.scans.insert_one(doc)

@@ -55,14 +55,26 @@ async def login(payload: UserLogin, db: AsyncIOMotorDatabase = Depends(get_db)):
     return resp
 
 
-async def _get_current_user(request: Request, db: AsyncIOMotorDatabase = Depends(get_db)):
+async def _get_current_user(request: Request):
+    """
+    Resolve the current user from the auth cookie.
+    Avoid forcing a DB dependency when unauthenticated so routes can return 401
+    even if MONGO_URI is not configured in local dev.
+    """
     token = request.cookies.get("access_token")
     if not token:
+        # No auth cookie; treat as unauthenticated without touching DB
         raise HTTPException(status_code=401, detail="Not authenticated")
     data = decode_token(token)
     uid = data.get("sub")
     if not uid:
         raise HTTPException(status_code=401, detail="Invalid token payload")
+    # Only hit DB if we have a token/uid
+    try:
+        db = get_db()
+    except RuntimeError:
+        # In dev without DB, surface a clear 503 instead of 500
+        raise HTTPException(status_code=503, detail="Database not configured; set MONGO_URI")
     user = await db.users.find_one({"_id": uid})
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
@@ -83,4 +95,3 @@ async def logout():
 
 # Expose dependency for other routers
 get_current_user = _get_current_user
-

@@ -9,6 +9,7 @@ export default function ScanForm({ onStart }: Props) {
   const [kind, setKind] = useState<ScanRequest['kind']>('address')
   const [input, setInput] = useState('')
   const [chain, setChain] = useState('auto')
+  const [compare, setCompare] = useState(false)
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState<string | null>(null)
 
@@ -17,7 +18,7 @@ export default function ScanForm({ onStart }: Props) {
     setErr(null)
     setBusy(true)
     try {
-      await onStart({ kind, input: input.trim(), chain: chain === 'auto' ? undefined : chain })
+      await onStart({ kind, input: input.trim(), chain: chain === 'auto' ? undefined : chain, compare_providers: compare })
     } catch (e: any) {
       setErr(String(e?.message || e))
     } finally {
@@ -34,11 +35,25 @@ export default function ScanForm({ onStart }: Props) {
             <input type="radio" name="kind" value="address" checked={kind === 'address'} onChange={() => setKind('address')} />
             Address
           </label>
-          <label className="inline-flex items-center gap-2">
-            <input type="radio" name="kind" value="xpub" checked={kind === 'xpub'} onChange={() => setKind('xpub')} />
+          <label className="inline-flex items-center gap-2" title={chain === 'ethereum' ? 'Ethereum does not support xpub' : ''}>
+            <input
+              type="radio"
+              name="kind"
+              value="xpub"
+              checked={kind === 'xpub'}
+              onChange={() => setKind('xpub')}
+              disabled={chain === 'ethereum'}
+            />
             Extended Public Key (xpub/ypub/zpub/tpub)
           </label>
         </div>
+      </div>
+
+      <div className="mb-6">
+        <label className="inline-flex items-center gap-2 text-sm">
+          <input type="checkbox" checked={compare} onChange={(e) => setCompare(e.target.checked)} />
+          Compare providers (if available)
+        </label>
       </div>
 
       <div className="mb-4">
@@ -62,9 +77,13 @@ export default function ScanForm({ onStart }: Props) {
           <option value="auto">Autodetect</option>
           <option value="bitcoin">Bitcoin</option>
           <option value="ethereum">Ethereum</option>
-          <option value="litecoin">Litecoin</option>
-          <option value="dogecoin">Dogecoin</option>
+          {/* Disabled until backends are implemented */}
+          <option value="litecoin" disabled>Litecoin (coming soon)</option>
+          <option value="dogecoin" disabled>Dogecoin (coming soon)</option>
         </select>
+        {chain === 'ethereum' && kind === 'xpub' && (
+          <p className="mt-2 text-sm text-orange-700 dark:text-orange-300">Ethereum does not support xpub. Switch to Address.</p>
+        )}
       </div>
 
       {err && <div className="mb-4 rounded bg-red-100 px-3 py-2 text-sm text-red-800 dark:bg-red-900/40 dark:text-red-200">{err}</div>}
@@ -79,4 +98,3 @@ export default function ScanForm({ onStart }: Props) {
     </form>
   )
 }
-
