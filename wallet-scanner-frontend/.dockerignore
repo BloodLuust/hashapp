@@ -1,0 +1,10 @@
+# Prevent copying large/unnecessary files into the image
+node_modules
+.next
+out
+build
+dist
+npm-debug.log
+Dockerfile
+.dockerignore
+

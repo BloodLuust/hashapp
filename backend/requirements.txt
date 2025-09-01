@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+motor
+passlib[bcrypt]
+PyJWT
+httpx
+celery
+aiobreaker
+redis
+email-validator

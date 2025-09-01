@@ -1,0 +1,36 @@
+/* Tiny stars drifting upward for dark mode */
+.stars {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  left: var(--x, 50%);
+  bottom: -10%;
+  width: 2px;
+  height: 2px;
+  border-radius: 9999px;
+  background: rgba(168, 216, 255, 0.95); /* baby blue */
+  box-shadow: 0 0 4px rgba(168, 216, 255, 0.5);
+  transform: translateY(0) scale(var(--s, 1));
+  animation: twinkle var(--tdur, 8s) ease-in-out var(--tdelay, 0s) infinite,
+             rise var(--dur, 20s) linear var(--delay, 0s) infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes rise {
+  0% { transform: translateY(10%); }
+  100% { transform: translateY(-110%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .star { animation: none; opacity: 0.6; }
+}
+

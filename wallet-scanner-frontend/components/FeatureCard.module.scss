@@ -1,0 +1,22 @@
+.card {
+  @apply rounded-xl bg-white shadow-sm ring-1 ring-gray-200 transition hover:shadow-md;
+}
+
+.icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, rgba(124,92,252,0.15), rgba(124,92,252,0.35));
+  display: grid;
+  place-items: center;
+}
+
+.title {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.desc {
+  color: #4b5563; // gray-600
+}
+

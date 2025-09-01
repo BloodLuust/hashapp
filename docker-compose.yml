@@ -1,0 +1,26 @@
+services:
+  frontend:
+    build: ./wallet-scanner-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./wallet-scanner-frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    environment:
+      - BACKEND_INTERNAL_URL=http://backend:8000
+      - NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    env_file:
+      - ./.env
+
+networks:
+  default:
+    name: walletscanner-network

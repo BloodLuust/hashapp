@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base resets and typography */
+:root {
+  --brand: #7C5CFC;
+}
+
+html, body, #__next { height: 100%; }
+
+body {
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+.container { @apply max-w-6xl; }
+
+.btn-primary {
+  @apply inline-flex items-center rounded-md bg-brand px-4 py-2 text-white shadow hover:bg-brand-dark transition-colors;
+}
+

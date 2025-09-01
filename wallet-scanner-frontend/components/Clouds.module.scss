@@ -1,0 +1,29 @@
+/* Soft drifting clouds for light mode */
+.clouds {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cloud {
+  position: absolute;
+  top: var(--y, 20%);
+  left: -30%;
+  width: var(--w, 240px);
+  height: var(--h, 120px);
+  border-radius: 9999px;
+  background: radial-gradient(120px 60px at 40% 50%, rgba(255,255,255,0.9), rgba(255,255,255,0.4) 70%, rgba(255,255,255,0));
+  filter: blur(6px);
+  animation: drift var(--dur, 60s) linear var(--delay, 0s) infinite;
+}
+
+@keyframes drift {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(160%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cloud { animation: none; opacity: 0.7; }
+}
+
