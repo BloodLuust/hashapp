@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisco
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from ..db.client import get_db
-from ..models.scan import ScanRequest
+from ..models.scan import ScanRequest, StartScanRequest
 from .routes_auth import get_current_user
 from ..services.blockchain import get_scanner
 
@@ -132,6 +132,81 @@ async def create_scan(req: ScanRequest, db: AsyncIOMotorDatabase = Depends(get_d
     await db.scans.insert_one(doc)
     asyncio.create_task(_run_scan_job(db, job_id))
     return {"id": job_id, "status": "pending"}
+
+
+@router.post("/start")
+async def start_scan(req: StartScanRequest, db: AsyncIOMotorDatabase = Depends(get_db), user = Depends(get_current_user)):
+    """
+    MVP starter for multi-mode scans.
+    - random: generate one 256-bit seed, derive xpub, start a scan
+    - range: pick one seed from [min,max] (randomized if requested), derive xpub, start a scan
+    - specific: pass through to existing flow (address/xpub)
+    Returns a list of job ids (one per chain requested; MVP defaults to bitcoin).
+    """
+    chains = req.chains or ["bitcoin"]
+    jobs: list[dict] = []
+    import secrets
+    from ..services.derivation import snapshot_from_hex, normalize_hex64
+
+    # Determine input type for each job
+    for chain in chains:
+        mode = req.mode
+        if mode == "specific":
+            if not req.input:
+                raise HTTPException(status_code=400, detail="input is required for specific mode")
+            kind = "xpub" if req.input[:4].lower() in {"xpub","ypub","zpub"} else "address"
+            inp = req.input
+        else:
+            # produce a 64-hex seed
+            if mode == "random":
+                hex64 = secrets.token_hex(32)
+            elif mode == "range":
+                if not req.min_hex or not req.max_hex:
+                    raise HTTPException(status_code=400, detail="min_hex and max_hex required for range mode")
+                try:
+                    lo = int(normalize_hex64(req.min_hex), 16)
+                    hi = int(normalize_hex64(req.max_hex), 16)
+                except Exception:
+                    raise HTTPException(status_code=400, detail="invalid hex range")
+                if lo > hi:
+                    raise HTTPException(status_code=400, detail="min_hex cannot be greater than max_hex")
+                space = hi - lo + 1
+                offset = secrets.randbelow(space) if req.randomize else 0
+                hex64 = f"{lo + offset:064x}"
+            else:
+                raise HTTPException(status_code=400, detail="unsupported mode")
+
+            # derive xpub snapshot
+            try:
+                snap = snapshot_from_hex(hex64)
+            except Exception as e:
+                raise HTTPException(status_code=400, detail=f"failed to derive from hex: {e}")
+            kind = "xpub"
+            inp = snap["xpub"]
+
+        # Insert scan doc and schedule job (reuse existing shape)
+        job_id = uuid.uuid4().hex
+        doc = {
+            "_id": job_id,
+            "user_id": user["_id"],
+            "status": "pending",
+            "progress": 0,
+            "logs": [f"start mode: {req.mode}"],
+            "kind": kind,
+            "input": inp,
+            "chain": chain,
+            "compare_providers": False,
+            "created_at": time.time(),
+            "meta": {
+                "start_mode": req.mode,
+                "range": {"min_hex": req.min_hex, "max_hex": req.max_hex, "randomize": req.randomize} if req.mode=="range" else None,
+            },
+        }
+        await db.scans.insert_one(doc)
+        asyncio.create_task(_run_scan_job(db, job_id))
+        jobs.append({"id": job_id, "chain": chain})
+
+    return {"jobs": jobs}
 
 
 @router.get("")

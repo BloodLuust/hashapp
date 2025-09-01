@@ -29,9 +29,28 @@ The backend exposes a small helper to generate hex strings with optional randomi
 Examples:
 
 ```json
-{ "count": 10 }
-{ "min_hex": "0x1000", "max_hex": "0x1fff", "count": 50, "randomize": true }
-{ "min_hex": "00", "max_hex": "ff", "count": 16, "randomize": false }
+
+{
+  "count": 10
+}
+```
+```json
+{ 
+  "min_hex": "0x1000", 
+  "max_hex": "0x1fff", 
+  "count": 50,
+  "randomize": true
+}
+```
+```json
+{ 
+  "min_hex": "00",
+  "max_hex": "ff",
+  "count": 16, 
+  "randomize": false
+}
+```
+
 ```
 
 Configure the cap via `HEX_QUEUE_MAX` (default 2048) in your environment.
