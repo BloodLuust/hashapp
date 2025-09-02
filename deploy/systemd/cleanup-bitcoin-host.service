@@ -1,0 +1,15 @@
+[
+Unit]
+Description=Weekly Bitcoin host cleanup
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash /root/cleanup_bitcoin_host.sh --journal-size 200M --purge-root-legacy
+Nice=10
+IOSchedulingClass=idle
+
+[Install]
+WantedBy=multi-user.target
+

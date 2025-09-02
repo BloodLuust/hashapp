@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import Button from '../components/Button';
+import RandomModeConsole from '../components/RandomModeConsole';
 import ParallaxBackground from '../components/ParallaxBackground';
 import HeaderBar from '../components/HeaderBar';
 import { useEffect, useState } from 'react';
@@ -10,6 +11,7 @@ import { fetchHealth } from '@/lib/api';
 const Parallax = dynamic(() => import('react-scroll-parallax').then(m => m.Parallax), { ssr: false });
 
 const Home: NextPage = () => {
+  const [showRandom, setShowRandom] = useState(false)
   return (
     <>
       <Head>
@@ -26,16 +28,20 @@ const Home: NextPage = () => {
               Wallet Recovery Starts Here
           </h1>
         </Parallax>
-        {/* Launch button */}
-        <a href="/dashboard">
-          <Button label="Launch Scanner" />
-        </a>
+        {/* Launch buttons */}
+        <div className="flex gap-3">
+          <a href="/dashboard">
+            <Button label="Launch Scanner" />
+          </a>
+          <button onClick={() => setShowRandom(true)} className="inline-flex items-center rounded-md bg-black text-white px-4 py-2 hover:bg-gray-800 transition-colors">Random Mode</button>
+        </div>
       </section>
 
       {/* Placeholder second section to enable scrolling (for parallax effect) */}
       <section className="h-screen flex items-center justify-center bg-white">
         <p className="text-xl text-gray-700">[ Additional content here ]</p>
       </section>
+      {showRandom && <RandomModeConsole open={showRandom} onClose={() => setShowRandom(false)} />}
     </>
   );
 };

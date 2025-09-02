@@ -1,0 +1,11 @@
+[Unit]
+Description=Run weekly cleanup for Bitcoin host
+
+[Timer]
+OnCalendar=weekly
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target
+

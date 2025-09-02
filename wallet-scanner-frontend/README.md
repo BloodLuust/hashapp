@@ -38,3 +38,20 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+
+## Random Mode (HD Key Stream)
+
+- API: `/api/random/stream` streams random hex with optional internal expansion (`mode=internal`) to derive xprv/ypub/zpub and scan addresses against Blockchair.
+- UI: Click "Random Mode" on the home page to open the console modal with Start/Stop, IPS control, and a details pane.
+
+Environment variables (in `.env.local`):
+- `BLOCKCHAIR_API_KEY` (optional): API key for Blockchair address queries.
+- `MONGODB_URI` (optional): if set, results are saved to `random_scans`.
+- `RANDOM_DEPTH` (optional): addresses per branch to scan (default 25 in streaming; 100 for expand API).
+- `RANDOM_CHECK_URL` (optional): if set, stream uses external URL instead of internal expansion.
+
+Install deps for HD/Blockchair features:
+
+```
+pnpm add bip32 bitcoinjs-lib bs58check mongodb
+```
