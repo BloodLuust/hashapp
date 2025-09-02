@@ -1,1 +1,0 @@
-/tmp/fix_bitcoind_snap.sh: /tmp/fix_bitcoind_snap.sh: cannot execute binary file
