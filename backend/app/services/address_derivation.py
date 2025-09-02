@@ -1,4 +1,4 @@
-"""
+    """
 HD wallet derivation helpers (BIP32/BIP44/BIP49/BIP84) would live here.
 For now this is a placeholder; use a vetted library when implementing.
 """
