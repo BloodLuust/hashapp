@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+$primary-color: #1a202c;
+$secondary-color: #2d3748;
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body {
+  background-color: white;
+  color: #111827;
+}
